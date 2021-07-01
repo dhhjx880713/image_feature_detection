@@ -1,0 +1,9 @@
+*.pyc
+*.pickle
+*.spyderproject
+*.spyderworkspace
+*.idea
+*.vscode
+*.html
+*.panim
+data/
