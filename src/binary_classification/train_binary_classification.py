@@ -3,6 +3,7 @@ import sys
 import glob
 import random
 import shutil
+import argparse
 import tensorflow as tf 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator 
 from tensorflow.keras import layers 
@@ -73,10 +74,11 @@ def train_res50():
     final_model = create_res50(learning_rate)
     
     ## train model
-    resnet_history = final_model.fit(train_generator, validation_data = validation_generator, epochs = epochs)
+    # resnet_history = final_model.fit(train_generator, validation_data = validation_generator, epochs = epochs)
+    resnet_history = final_model.fit(train_generator, validation_data = validation_generator, steps_per_epoch=50, epochs = epochs)
 
     ## save model
-    save_path = r'data/models/'
+    save_path = r'../../data/models/'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     final_model.save_weights(os.path.join(save_path, '_'.join([model_name, str(learning_rate), str(epochs)]) + '.ckpt'))
@@ -106,7 +108,7 @@ def train_efficientnetB7():
     predictions = Dense(1, activation="sigmoid")(x)
     model_final = Model(base_model.input, predictions)
     model_final.compile(optimizer = RMSprop(lr=learning_rate) ,loss='binary_crossentropy',metrics=['accuracy'])
-    eff_history = model_final.fit_generator(train_generator, validation_data = validation_generator, epochs = epochs)
+    eff_history = model_final.fit(train_generator, validation_data = validation_generator, epochs = epochs)
     save_path = r'data/models/'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -114,6 +116,14 @@ def train_efficientnetB7():
 
 
 if __name__ == "__main__":
-    # split_train_test_data()
-    # train_res50()
-    train_efficientnetB7()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type",
+                        type=str,
+                        default='res50')
+    args = parser.parse_args()
+    if args.model_type == "res50":
+        train_res50()
+    elif args.model_type == "efficientnetB7":
+        train_efficientnetB7()
+    else:
+        raise NotImplementedError
