@@ -49,6 +49,7 @@ def create_res50(learning_rate):
 
 def train_res50():
     ## Data Augmentation 
+    print("train res50")
     train_datagen = ImageDataGenerator(rescale = 1./255., rotation_range = 40, width_shift_range = 0.2, height_shift_range = 0.2, shear_range = 0.2, zoom_range = 0.2, horizontal_flip = True)
 
     test_datagen = ImageDataGenerator(rescale = 1.0/255.)
@@ -74,8 +75,8 @@ def train_res50():
     final_model = create_res50(learning_rate)
     
     ## train model
-    # resnet_history = final_model.fit(train_generator, validation_data = validation_generator, epochs = epochs)
-    resnet_history = final_model.fit(train_generator, validation_data = validation_generator, steps_per_epoch=50, epochs = epochs)
+    resnet_history = final_model.fit(train_generator, validation_data = validation_generator, epochs = epochs)
+    # resnet_history = final_model.fit(train_generator, validation_data = validation_generator, steps_per_epoch=50, epochs = epochs)
 
     ## save model
     save_path = r'../../data/models/'
@@ -86,7 +87,7 @@ def train_res50():
 
 
 def train_efficientnetB7():
-
+    print("train EfficientnetB7")
     train_datagen = ImageDataGenerator(rescale = 1./255., rotation_range = 40, width_shift_range = 0.2, height_shift_range = 0.2, shear_range = 0.2, zoom_range = 0.2, horizontal_flip = True)
 
     test_datagen = ImageDataGenerator(rescale = 1.0/255.)
